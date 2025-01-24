@@ -30,12 +30,16 @@ export class AuthService {
   }
 
   static async login(email: string, password: string) {
+    // ver si el usuario existe
+    /* const query = `SELECT id, email, role, password  FROM user WHERE email='${email}' AND password='${password}' ` 
+    const findUsers = await prisma.$queryRawUnsafe(query) as User[]
+    const findUser = findUsers[0] */
     const findUser = await prisma.user.findUnique({ where: { email } });
-    if (!findUser) throw new Error("Invalid user or password");
+    if (!findUser) throw new Error("Invalid user or password"); 
 
-    // if(Encripto(password) == findUser.password)
+    // Ver si el password coincide
     const isPasswordCorrect = await bcrypt.compare(password, findUser.password);
-    if (!isPasswordCorrect) throw new Error("Password incorrect");
+    if (!isPasswordCorrect) throw new Error("Password incorrect"); 
 
     // generar el token de autenticacion
     const token = jwt.sign(
