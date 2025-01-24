@@ -6,6 +6,6 @@ const router = Router()
 
 // listar "api/users/", para listar todos los usuarios
 router.get('/profile', isAuthenticate, UserController.profile)
-router.get('/', isAuthenticate, UserController.profile)
+router.get('/', isAuthenticate, UserController.getAll) // listar todos los usuarios
 
 export default router

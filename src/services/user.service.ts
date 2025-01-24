@@ -20,9 +20,15 @@ export class UserService{
     return findUser;
   }
 
+  // listar todos los usuarios
   static async getAll() {
     const users = await prisma.user.findMany({
-      omit: {password:true}
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        role: true,
+      }
     })
     return users
   }

@@ -25,11 +25,11 @@ npm i --save-dev @types/cookie-parser
 
 ```
 # Ejercicio 1
-- [] Crea el endpoint que liste todos los usuarios de la web
+- [X] Crea el endpoint que liste todos los usuarios de la web
 
-- [] A este endpoint solo puede acceder el usuario - role=admin
+- [X] A este endpoint solo puede acceder el usuario - role=admin
 
-- []Crea rutas, servicio, controllers, middleware
+- [X]Crea rutas, servicio, controllers, middleware
 
 
 # Ejercicio 2

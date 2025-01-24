@@ -9,6 +9,8 @@ export const isAuthenticate = (req: Request, res: Response, next:NextFunction):a
   // const token = req.headers.authorization?.split(" ")[1]
   const token = req.cookies.token
   if (!token) return res.status(401).json({ error: "Acess denied" });
+  // validacion del rol admin
+  
 
   try {
     const tokenDecodificado = jwt.verify(token, TOKEN_PASSWORD);
@@ -18,4 +20,13 @@ export const isAuthenticate = (req: Request, res: Response, next:NextFunction):a
     res.status(401).json({ error: "Invalid token" })
   }
 
-};
+}
+
+export const isAdmin = (req:Request, res:Response, next:NextFunction) => {
+  const {user} = req.body
+
+  if(!user || user.role != 'admin') {
+    return res.status(403).json({ error: "Acces denied, only admins" });
+  }
+  next()
+}
