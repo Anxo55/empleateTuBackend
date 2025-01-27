@@ -42,4 +42,5 @@ npm i --save-dev @types/cookie-parser
 - [] Comprueba que el password se de minimo 4 letras
 
 # Ejercicio 3
-- []Crea un frontend con vite + tailwind 4.0 y react
+
+- [X] Crea un frontend con vite + tailwind 4.0 y react
