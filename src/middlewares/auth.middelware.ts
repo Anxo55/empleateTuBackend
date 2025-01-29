@@ -19,14 +19,5 @@ export const isAuthenticate = (req: Request, res: Response, next:NextFunction):a
   } catch (error) {
     res.status(401).json({ error: "Invalid token" })
   }
-
-}
-
-export const isAdmin = (req:Request, res:Response, next:NextFunction) => {
-  const {user} = req.body
-
-  if(!user || user.role != 'admin') {
-    return res.status(403).json({ error: "Acces denied, only admins" });
-  }
-  next()
+  
 }

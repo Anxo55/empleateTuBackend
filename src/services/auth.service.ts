@@ -8,6 +8,7 @@ import jwt from "jsonwebtoken";
 // usar un patron singleton
 const prisma = new PrismaClient();
 const TOKEN_PASSWROD = process.env.TOKEN_PASSWORD || "pass";
+
 export class AuthService {
   static async register(user: User) {
     //ver si el usuario existe
