@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { AuthService } from "../services/auth.service";
 import { Prisma } from "@prisma/client";
 import { UserService } from "@/services/user.service";
-import { ErrorMiddleware } from "@/middlewares/error.middleware";
+import { ErrorMiddleware } from "../middlewares/error.middleware";
 
 
 export class AuthController{

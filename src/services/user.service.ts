@@ -1,4 +1,4 @@
-import { httpException } from "@/exceptions/httpException";
+import { httpException } from "../exceptions/httpException";
 import { PrismaClient, User } from "@prisma/client";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
