@@ -25,4 +25,56 @@ model User {
   acceptNotifications Boolean @default(true)
   createdAt DateTime @default(now()) 
   updateAt DateTime @updatedAt
+
+  offerst Offerts[]
+  rates Rate[]
 }
+
+model Offerts {
+  id Int  @id @default(autoincrement())
+  title String
+  description String?
+  active  Boolean @default(true)
+  contactEmail String?
+  location  String?
+  published DateTime  @default(now()) //iso8601
+  expired DateTime //iso8601
+
+  createdAt DateTime @default(now()) 
+  updateAt DateTime @updatedAt
+
+  //FK CLAVES FORANEAS  
+  idCategory Int
+  category Category? @relation(fields: [idCategory], references: [id])
+  // Aqui enganchamos el categoryId con el id de categoria 
+
+  idUserCreator Int
+  userCreator User @relation(fields: [idUserCreator], references: [id])
+
+rate Rate[]
+}
+
+model Category {
+  id Int  @id @default(autoincrement())
+  name  String  @unique
+
+  createdAt DateTime @default(now()) 
+  updateAt DateTime @updatedAt
+
+  offerts Offerts[] 
+}
+
+model Rate {
+  idUser  Int
+  idOffer Int
+  value Int
+
+  createdAt DateTime @default(now()) 
+  updateAt DateTime @updatedAt
+
+user User @relation(fields: [idUser], references: [id])
+offerts Offerts @relation(fields: [idOffer], references: [id])
+
+@@id([idUser, idOffer])
+}
+

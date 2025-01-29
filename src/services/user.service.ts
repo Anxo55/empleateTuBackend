@@ -1,3 +1,4 @@
+import { httpException } from "@/exceptions/httpException";
 import { PrismaClient, User } from "@prisma/client";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
@@ -10,13 +11,13 @@ export class UserService{
 
   static async getByEmail(email: string) {
     const findUser = await prisma.user.findUnique({ where: { email: email }, omit: {password:true} });
-    if (!findUser) throw new Error("User not found");
+    if (!findUser) throw new httpException(404, "User not found");
     return findUser;
   }
 
   static async getById(id: number) {
     const findUser = await prisma.user.findUnique({ where: { id: id } });
-    if (!findUser) throw new Error("User not found");
+    if (!findUser) throw new httpException(404, "User not found");
     return findUser;
   }
 

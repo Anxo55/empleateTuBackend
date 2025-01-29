@@ -1,11 +1,12 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { AuthService } from "../services/auth.service";
 import { Prisma } from "@prisma/client";
 import { UserService } from "@/services/user.service";
+import { ErrorMiddleware } from "@/middlewares/error.middleware";
 
 
 export class AuthController{
-    static async register (req:Request, res:Response){
+    static async register (req:Request, res:Response, next:NextFunction){
         try {
             console.log("llegate registration");
             
@@ -13,11 +14,11 @@ export class AuthController{
             const newUser = await AuthService.register(userData)
             res.status(201).json({message:'User register successfully', newUser}) 
         } catch (error) {
-            res.status(409).json({message:'Fallo al registrar usuario '+error})
+            next(error)
         }
         
     }
-   static async login (req:Request,res:Response){
+   static async login (req:Request,res:Response, next: NextFunction){
     
     try {
         const userData = req.body
@@ -34,7 +35,7 @@ export class AuthController{
         res.status(201).json({message:'Login successfully', token})
         
     } catch (error) {
-        res.status(409).json({message:'Fallo al loguearse el usuario'+error})
+        next(ErrorMiddleware)
     }
 
     }

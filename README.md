@@ -23,6 +23,11 @@ npm i --save-dev @types/compression
 npm i cookie-parser
 npm i --save-dev @types/cookie-parser
 
+npm i cors
+npm i --save-dev @types/cors
+
+npm i express-validator
+
 ```
 # Ejercicio 1
 - [X] Crea el endpoint que liste todos los usuarios de la web
@@ -33,7 +38,7 @@ npm i --save-dev @types/cookie-parser
 
 
 # Ejercicio 2
-- [] Valida mediantee un middleware
+- [] Valida mediante un middleware
 
 - [] El formulario de registro
 

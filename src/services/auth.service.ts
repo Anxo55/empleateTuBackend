@@ -1,3 +1,4 @@
+import { httpException } from "@/exceptions/httpException";
 import { PrismaClient, User } from "@prisma/client";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
@@ -14,7 +15,7 @@ export class AuthService {
     const findUser = await prisma.user.findUnique({
       where: { email: user.email },
     });
-    if (findUser) throw new Error(`User ${user.email} already exists`);
+    if (findUser) throw new httpException(409, `User ${user.email} already exists`);
 
     //encriptar el password
 
@@ -35,11 +36,11 @@ export class AuthService {
     const findUsers = await prisma.$queryRawUnsafe(query) as User[]
     const findUser = findUsers[0] */
     const findUser = await prisma.user.findUnique({ where: { email } });
-    if (!findUser) throw new Error("Invalid user or password"); 
+    if (!findUser) throw new httpException(401, "Invalid user or password"); 
 
     // Ver si el password coincide
     const isPasswordCorrect = await bcrypt.compare(password, findUser.password);
-    if (!isPasswordCorrect) throw new Error("Password incorrect"); 
+    if (!isPasswordCorrect) throw new httpException(401, "Password incorrect"); 
 
     // generar el token de autenticacion
     const token = jwt.sign(
