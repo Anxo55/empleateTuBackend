@@ -1,7 +1,5 @@
-import { NextFunction, Request, Response } from "express";
-import { AuthService } from "@/services/auth.service";
-import { Prisma } from "@prisma/client";
-import { UserService } from "../services/user.service";
+import { NextFunction, Request, Response } from "express"
+import { UserService } from "../services/user.service"
 
 export class UserController {
   static async profile(req: Request, res: Response, next:NextFunction) {

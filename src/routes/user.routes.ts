@@ -6,7 +6,7 @@ import { isAdmin } from "../middlewares/isAdmin.middleware";
 const router = Router()
 
 // listar "api/users/", para listar todos los usuarios
-router.get('/profile', isAuthenticate, UserController.profile)
+router.get('/profile', isAuthenticate, UserController.profile) // perfil de un usuario especifico
 router.get('/', isAuthenticate,isAdmin, UserController.getAll) // listar todos los usuarios
 
 export default router
