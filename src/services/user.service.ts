@@ -1,3 +1,4 @@
+import { prisma } from "../database/database";
 import { httpException } from "../exceptions/httpException";
 import { PrismaClient, User } from "@prisma/client";
 import bcrypt from "bcrypt";
@@ -6,7 +7,7 @@ import jwt from "jsonwebtoken";
 // alta coexion bajo acoplamiento
 
 // usar un patron singleton
-const prisma = new PrismaClient();
+// const prisma = new PrismaClient();
 export class UserService{
 
   static async getByEmail(email: string) {

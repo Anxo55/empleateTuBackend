@@ -6,7 +6,7 @@ const router = Router()
 router.get('/', OffertController.getAll)
 router.get('/:id', OffertController.getByID)
 // POST añadir una oferta nueva localhost:3000/api/offerts/ {body}
-router.post('/', OffertController.save)
+router.post('/', OffertController.create)
 // DELETE borrar una oferta localhost:3000/api/offerts/XXXX
 router.delete('/:id', OffertController.delete)
 // PUT modificar una oferta localhost:3000/api/offerts/XXXX

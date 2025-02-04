@@ -25,10 +25,11 @@ static async getByID(req:Request, res:Response, next:NextFunction) {
     }
 }
 
-static async save(req:Request, res:Response,next:NextFunction) {
+static async create(req:Request, res:Response,next:NextFunction) {
     try {
         const offer = req.body 
-        const offerSaved = await OffertService.save(offer)
+        const id = req.body.user.id
+        const offerSaved = await OffertService.create(offer, id)
         res.status(201).json(offerSaved)
     } catch (error) {
         next(error)
@@ -40,6 +41,7 @@ static async save(req:Request, res:Response,next:NextFunction) {
 static async delete(req:Request, res:Response,next:NextFunction) {
     try {
         const id = Number.parseInt(req.params.id)
+        if(!id) throw new Error("Id is required")
         const offerDeleted = await OffertService.delete(id)
         res.status(200).json(offerDeleted)
     } catch (error) {
@@ -61,10 +63,27 @@ static async update(req:Request, res:Response,next:NextFunction) {
 }
 
 static async rate(req:Request, res:Response,next:NextFunction) {
+    try {
+        const id = Number.parseInt(req.params.id)
+        const {value} = req.body
+        const userId = req.body.user.id
+
+        const offerRated = await OffertService.rate(userId, id , value)
+        res.status(200).json(offerRated)
+    } catch (error) {
+        next(error)
+    }
     
 }
 
 static async getRate(req:Request, res:Response,next:NextFunction) {
+    try {
+        const id = Number.parseInt(req.params.id)
+        const offerRated = await OffertService.getRate(id)
+        res.status(200).json(offerRated)
+    } catch (error) {
+        next(error)
+    }
     
 } 
 
