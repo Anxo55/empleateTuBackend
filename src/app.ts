@@ -1,7 +1,8 @@
 import express, {Response, Request} from "express"
 import authRouter from './routes/auth.routes'
 import userRouter from './routes/user.routes'
-import offertRouter from './routes/offert.routes'
+import offerRouter from './routes/offert.routes'
+import categoryRouter from './routes/category.routes'
 import cors from 'cors'
 import rateLimit from "express-rate-limit"
 import helmet from "helmet"
@@ -25,7 +26,7 @@ app.use(limiter)
 //TODO: limitar cors
 //TODO: Cambiar URL cuando deployemos
 app.use(cors({
-    origin: 'http://localhost:5173',
+    origin: ['http://localhost:5173', '*'],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true
 }
@@ -33,7 +34,8 @@ app.use(cors({
 
 app.use('/api/auth', authRouter)
 app.use('/api/users', userRouter)
-app.use('/api/offerts', offertRouter)
+app.use('/api/offers', offerRouter)
+app.use('/api/category', categoryRouter)
 
 
 app.get('/', (req:Request, res:Response)=> {

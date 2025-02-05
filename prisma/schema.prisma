@@ -26,7 +26,7 @@ model User {
   createdAt DateTime @default(now()) 
   updateAt DateTime @updatedAt
 
-  offerst Offerts[]
+  offerts Offerts[]
   rates Rate[]
 }
 

@@ -1,22 +1,28 @@
-import { OffertController } from "../controllers/offert.controller"
-import { Router } from "express"
+import { Router } from "express";
+import { OfferController } from "../controllers/offert.controller";
+import { isAuthenticate } from "../middlewares/auth.middelware";
 
 const router = Router()
-// GET listar todas las ofertas localhost:3000/api/offerts/?title=react&category=dam
-router.get('/', OffertController.getAll)
-router.get('/:id', OffertController.getByID)
-// POST añadir una oferta nueva localhost:3000/api/offerts/ {body}
-router.post('/', OffertController.create)
-// DELETE borrar una oferta localhost:3000/api/offerts/XXXX
-router.delete('/:id', OffertController.delete)
-// PUT modificar una oferta localhost:3000/api/offerts/XXXX
-router.put('/:id', OffertController.update)
 
-// Calificamos una oferta x {body}
-router.post('/:id/rate/', OffertController.rate)
-// Vemos que calificacion x se le ha data a una oferta
-router.get('/:id/rate/', OffertController.getRate)
+//API REST FULL
 
-//GraphQL
+
+//GET Listar todas las ofertas localhost:3000/api/offers/?title=react&category=dam
+router.get('/', OfferController.getAll)
+//localhost:3000/api/offers/xxxx
+router.get('/:id', OfferController.getById)
+//POST añadir una oferta nueva localhost:3000/api/offers/  {body}
+router.post('/', isAuthenticate, OfferController.create)
+//DELETE Borrar una oferta localhost:3000/api/offers/XXXX  
+router.delete('/:id',isAuthenticate, OfferController.delete)
+//PUT modificar una oferta localhost:3000/api/offers/XXXX  {body}
+router.put('/:id',isAuthenticate, OfferController.update)   
+
+// Calificamos una oferta x   {body}
+router.post('/:id/rate/',isAuthenticate,OfferController.rate)  
+// Vemos que calificación (total) se le ha data a una oferta X
+router.get('/:id/rate/', isAuthenticate, OfferController.getRate)
+
+
 
 export default router

@@ -1,90 +1,95 @@
-// import { OffertService } from "../services/offert.service";
-import { OffertService } from "../services/offert.service";
-import {Request, Response, NextFunction } from "express";
+import { httpException } from '@/exceptions/httpException';
+import { OfferService } from '@/services/offert.service';
+import {Response, Request, NextFunction} from 'express'
 
-export class OffertController {
-    
-static async getAll(req: Request, res: Response, next:NextFunction) {
-    //para ofertas
-    try {
-        const offers = await OffertService.getAll()
-        res.status(200).json(offers)
-    } catch (error) {
-        next(error)
+export class OfferController{
+    static async getById(req:Request, res:Response, next:NextFunction){
+        try{
+            const id = Number.parseInt(req.params.id)
+            if (isNaN(id)) throw new httpException(400, "Invalid offer ID");
+
+            // pasar a entero
+            const offer = await OfferService.getById(id)
+            res.status(200).json(offer)
+        }catch(error){
+            next(error)
+        }
     }
 
-  }
-
-static async getByID(req:Request, res:Response, next:NextFunction) {
-    try {
-        const id = Number.parseInt(req.params.id)
-        const offer = await OffertService.getById(id)
-        res.status(200).json(offer)
-    } catch (error) {
-        next(error)
-    }
-}
-
-static async create(req:Request, res:Response,next:NextFunction) {
-    try {
-        const offer = req.body 
-        const id = req.body.user.id
-        const offerSaved = await OffertService.create(offer, id)
-        res.status(201).json(offerSaved)
-    } catch (error) {
-        next(error)
+    static async getAll(req:Request, res:Response, next: NextFunction){
+        try{
+            const { title } = req.query;
+            const user = await OfferService.getAll(title as string)
+            res.status(200).json(user)
+        }catch(error){
+            next(error)
+        }
     }
 
-}
+    static async create(req:Request, res:Response, next: NextFunction){
+        try{
+            const offerData = req.body
+            const userId = req.user?.id
+            
 
+            if (!userId) throw new httpException(400, "User creator ID is required");
+            
 
-static async delete(req:Request, res:Response,next:NextFunction) {
-    try {
-        const id = Number.parseInt(req.params.id)
-        if(!id) throw new Error("Id is required")
-        const offerDeleted = await OffertService.delete(id)
-        res.status(200).json(offerDeleted)
-    } catch (error) {
-        next(error)
+            const newOffer = await OfferService.create(userId, offerData)
+            res.status(200).json(newOffer)
+        }catch(error){
+            next(error)
+        }
     }
-    
-}
+    static async update(req:Request, res:Response, next: NextFunction){
+        try{
+            const offerData = req.body
+            const id = Number.parseInt(req.params.id)
+            if (isNaN(id)) throw new httpException(400, "Invalid offer ID");
 
-static async update(req:Request, res:Response,next:NextFunction) {
-    try {
-        const id = Number.parseInt(req.params.id)
-        const offer = req.body
-        const offerUpdated = await OffertService.update(id, offer)
-        res.status(200).json(offerUpdated)
-    } catch (error) {
-        next(error)
+            const updatedOffer = await OfferService.update(id, offerData)
+            res.status(200).json(updatedOffer)
+        }catch(error){
+            next(error)
+        }
     }
-    
-}
 
-static async rate(req:Request, res:Response,next:NextFunction) {
-    try {
-        const id = Number.parseInt(req.params.id)
-        const {value} = req.body
-        const userId = req.body.user.id
+    static async delete(req:Request, res:Response, next: NextFunction){
+        try{
+            const id = Number.parseInt(req.params.id)
+            if (isNaN(id)) throw new httpException(400, "Invalid offer ID");
 
-        const offerRated = await OffertService.rate(userId, id , value)
-        res.status(200).json(offerRated)
-    } catch (error) {
-        next(error)
+            const deletedOffer = await OfferService.delete(id)
+            res.status(200).json(deletedOffer)
+        }catch(error){
+            next(error)
+        }
     }
-    
-}
+    static async rate(req:Request, res:Response, next: NextFunction){
+        try{
+            const id = Number.parseInt(req.params.id)
+            if (isNaN(id)) throw new httpException(400, "Invalid offer ID");
 
-static async getRate(req:Request, res:Response,next:NextFunction) {
-    try {
-        const id = Number.parseInt(req.params.id)
-        const offerRated = await OffertService.getRate(id)
-        res.status(200).json(offerRated)
-    } catch (error) {
-        next(error)
+            const {value} = req.body
+            const userId = req.user?.id
+            if(!userId) throw new httpException(400, "User creator ID is required");
+
+            await OfferService.rate(userId, id, value)
+            res.status(200).json({message: 'Offer rate successfully'})
+        }catch(error){
+            next(error)
+        }
     }
-    
-} 
 
+    static async getRate(req:Request, res:Response, next: NextFunction){
+        try{
+            const id = Number.parseInt(req.params.id)
+            if (isNaN(id)) throw new httpException(400, "Invalid offer ID");
+
+            await OfferService.getRate(id)
+            res.status(200).json({message: 'Offer rate successfully'})
+        }catch(error){
+            next(error)
+        }
+    }
 }

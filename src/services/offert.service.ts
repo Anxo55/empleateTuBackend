@@ -1,73 +1,122 @@
+import { httpException } from "@/exceptions/httpException";
 import { prisma } from "../database/database";
-import { httpException } from "../exceptions/httpException";
-import { Offerts, PrismaClient, User } from "@prisma/client";
+import { Offerts } from "@prisma/client";
+// import { httpException } from "../exceptions/httpException";
+// import { Offer, PrismaClient, User } from "@prisma/client";
+//const prisma = new PrismaClient()
 
-// alta coexion bajo acoplamiento
+export class OfferService {
 
-// usar un patron singleton
-// const prisma = new PrismaClient();
+    static async getById(id: number){
+        const findOffer = await prisma.offerts.findUnique({ where: {id}})
+        if(!findOffer) throw new httpException(404, 'Offer not found')
+         return findOffer
+     }
 
-export class OffertService{
-  
-  static async getById(id: number) {
-    const offer = await prisma.offerts.findUnique({ where: { id: id } });
-    if (!offer) throw new httpException(404, "Offer not found");
-    return offer
-  }
+     // localhost:3000/api/offer/?title=dam
+     static async getAll(title: string = ''){
+       /*  return await prisma.offer.findMany({
+            where: title ? {
+                title: {
+                    contains: title
+                }
+            } : {},
+            orderBy: {
+                createdAt: 'desc'
+            },
+            take: 100
+        }) */
 
-  // localhost:3000/api/offerts/?title=dam
-  static async getAll(title:string = ''){
-    const offerts = await prisma.offerts.findMany({
-    where: title? { title: { contains: title } }: {},
-    orderBy: { createdAt: 'desc' }, take: 100
+            return await prisma.offerts.findMany({
+                where: {
+                    ...(title && {
+                        title: {
+                            contains: title,
+                            //mode: "insensitive" // Búsqueda sin distinción entre mayúsculas y minúsculas
+                        }
+                    })
+                },
+                orderBy: {
+                    createdAt: 'desc'
+                },
+                take: 100,
+                include: {
+                    category: {
+                        select: {
+                            name: true
+                        }
+                    }
+                }
+            });
+     }
 
-    })
-  }
+     static async create(idUser: number, offer: Offerts){
+        return await prisma.offerts.create({
+            data: {
+                ...offer,
+                idUserCreator: idUser
+            } 
+        })
+     }
 
-  static async create(idUser:number,  offer: Offerts) {
+     static async update(id: number, offer: Offerts){
+        const findOffer = await prisma.offerts.findUnique({where:{id}})
+        if(!findOffer) throw new httpException(404, 'Offer doesnt exists')
+        return await prisma.offerts.update({
+            where: {id},
+            data: {
+                ...offer,
+            } 
+        })
+     }
 
-    return await prisma.offerts.create({
-      data:{ ...offer,
-      idUserCreator: idUser
+     static async delete(id: number) {
+        try {
+            return await prisma.offerts.delete({ where: { id } });
+        } catch (error) {
+            throw new httpException(404, "Offer not found");
+        }
+    }
+    
+
+     
+    static async rate(idOffer: number, idUser: number, value: number): Promise<void> {
+        // Validar que el rating está dentro del rango permitido
+        if (value < 0 || value > 5) {
+          throw new Error("Rating must be between 0 and 5.");
+        }
+    
+        // Verificar si la oferta existe
+        const offer = await prisma.offerts.findUnique({ where: { id: idOffer } });
+        if (!offer) {
+          throw new Error("Offer not found.");
+        }
+    
+        // Actualizar o crear la calificación
+    
+        /*
+        SELECT  AVG(value) AS averageValue, COUNT(value) AS totalCount
+    FROM Rating
+    WHERE offerId = <offerId>;
+        */
+        await prisma.rate.upsert({
+          where: { idUser_idOffer: { idUser, idOffer } },
+          update: { value },
+          create: { idUser, idOffer, value },
+        });
       }
-    })
-
-  }
-
-  static async delete(id: number) {
-    const offer = await prisma.offerts.delete({ where: { id: id } });
-    return offer;
-  }
-
-  static async update(id: number, offer: Offerts) {
-    const findOffer = prisma.offerts.findUnique({where: { id} })
-    if (!findOffer) throw new httpException(404, "Offer not found");
-    return await prisma.offerts.update({
-      where: {id },
-      data: { ...offer,
+    
+    
+      static async getRate(idOffer: number) {
+        const ratingStats = await prisma.rate.aggregate({
+          where: { idOffer },
+          _avg: { value: true }, // Calcular el promedio
+          _count: { value: true }, // Contar el total de calificaciones
+        });
+        return {
+          totalRatings: ratingStats._count.value,
+          averageRating: ratingStats._avg.value?.toFixed(2)
+        }
       }
-    })
-  }
 
-  /* static async rate(user: User, id: number, rate: any) {
-    const offer = await prisma.offerts.findUnique({ where: { id: id } });
-    if (!offer) throw new httpException(404, "Offer not found");
-
-    const rateCreated = await prisma.rates.create({
-      data: {
-        value: rate.value,
-        user: { connect: { id: user.id } },
-        offert: { connect: { id: id } },
-      },
-    });
-    return rate
-  }
-
-  static async getRate(id: number) {
-    const rates = prisma.rates.findMany({
-      where: { offertId: id },
-      include: { user: true },
-    });
-    return
-  } */
 }
