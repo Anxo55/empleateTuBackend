@@ -54,7 +54,7 @@ export class OfferService {
         return await prisma.offerts.create({
             data: {
                 ...offer,
-                idUserCreator: idUser
+                idUserCreator: 1
             } 
         })
      }

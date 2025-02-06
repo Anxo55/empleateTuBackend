@@ -44,7 +44,7 @@ model Offerts {
   updateAt DateTime @updatedAt
 
   //FK CLAVES FORANEAS  
-  idCategory Int
+  idCategory Int?
   category Category? @relation(fields: [idCategory], references: [id])
   // Aqui enganchamos el categoryId con el id de categoria 
 
