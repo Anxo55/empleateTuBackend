@@ -28,7 +28,7 @@ app.use(limiter)
 //TODO: limitar cors
 //TODO: Cambiar URL cuando deployemos
 app.use(cors({
-    origin: ['http://localhost:5173', 'https://empleatetufrontend-dxxp.onrender.com', '*'],
+    origin: ['http://localhost:5173', 'https://empleatetufrontend-dxxp.onrender.com'],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true
 }
