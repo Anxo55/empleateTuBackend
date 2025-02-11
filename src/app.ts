@@ -8,6 +8,7 @@ import rateLimit from "express-rate-limit"
 import helmet from "helmet"
 import compression from 'compression'
 import cookieParser from 'cookie-parser'
+import morgan from 'morgan'
 
 const app = express()
 app.use(express.json())
@@ -15,6 +16,7 @@ app.use(express.json())
 app.use(helmet())
 app.use(compression())
 app.use(cookieParser())
+app.use(morgan('tiny'))
 
 const limiter = rateLimit({
     max:100,
@@ -43,5 +45,7 @@ app.get('/', (req:Request, res:Response)=> {
 })
 
 export default app
+
+
 
 
