@@ -1,7 +1,7 @@
-import { httpException } from "../exceptions/httpException";
+import { httpException } from "@/exceptions/httpException";
 import { prisma } from "../database/database";
 import { Offerts } from "@prisma/client";
-// import { httpException } from "../exceptions/httpException";
+// import { HttpException } from "../exceptions/httpException";
 // import { Offer, PrismaClient, User } from "@prisma/client";
 //const prisma = new PrismaClient()
 
@@ -15,7 +15,7 @@ export class OfferService {
 
      // localhost:3000/api/offer/?title=dam
      static async getAll(title: string = ''){
-       /*  return await prisma.offer.findMany({
+       /*  return await prisma.offerts.findMany({
             where: title ? {
                 title: {
                     contains: title
@@ -51,10 +51,11 @@ export class OfferService {
      }
 
      static async create(idUser: number, offer: Offerts){
+        console.log('creando',idUser)
         return await prisma.offerts.create({
             data: {
                 ...offer,
-                idUserCreator: 1
+                idUserCreator: idUser
             } 
         })
      }

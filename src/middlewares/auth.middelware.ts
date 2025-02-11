@@ -1,6 +1,10 @@
-// import { customJwtPayload } from "@/types/express";
-import { customJwtPayload } from "@/types/express";
 import { Response, Request, NextFunction } from "express";
+
+interface customJwtPayload {
+  id: number;
+  email: string;
+  // Add other properties as needed
+}
 import jwt from "jsonwebtoken";
 
 const TOKEN_PASSWORD = process.env.TOKEN_PASSWORD || "pass";

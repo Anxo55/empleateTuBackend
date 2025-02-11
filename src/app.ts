@@ -30,14 +30,15 @@ app.use(limiter)
 app.use(cors({
     origin: ['http://localhost:5173', 'https://empleatetufrontend-dxxp.onrender.com'],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    credentials: true
+    credentials: true,
+    allowedHeaders :['Content-Type', 'Authorization']
 }
 ))
 
 app.use('/api/auth', authRouter)
 app.use('/api/users', userRouter)
 app.use('/api/offers', offerRouter)
-app.use('/api/category', categoryRouter)
+app.use('/api/categories', categoryRouter)
 
 
 app.get('/', (req:Request, res:Response)=> {

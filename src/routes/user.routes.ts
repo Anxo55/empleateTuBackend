@@ -1,12 +1,14 @@
 import { Router } from "express";
-import { isAuthenticate } from "../middlewares/auth.middelware";
 import { UserController } from "../controllers/user.controller";
 import { isAdmin } from "../middlewares/isAdmin.middleware";
+import { isAuthenticate } from "../middlewares/auth.middelware";
 
-const router = Router()
+const router = Router();
 
-// listar "api/users/", para listar todos los usuarios
-router.get('/profile', isAuthenticate, UserController.profile) // perfil de un usuario especifico
-router.get('/', isAuthenticate,isAdmin, UserController.getAll) // listar todos los usuarios
+// Perfil del usuario autenticado
+router.get('/profile', isAuthenticate, UserController.profile);
 
-export default router
+// Listar todos los usuarios (solo admin)
+router.get('/', isAuthenticate, isAdmin, UserController.getAll);
+
+export default router;
