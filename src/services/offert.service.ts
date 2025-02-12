@@ -1,4 +1,4 @@
-import { httpException } from "@/exceptions/httpException";
+import { httpException } from "../exceptions/httpException";
 import { prisma } from "../database/database";
 import { Offerts } from "@prisma/client";
 // import { HttpException } from "../exceptions/httpException";

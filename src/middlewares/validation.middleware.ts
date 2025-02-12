@@ -1,6 +1,6 @@
 import { validationResult } from "express-validator";
 import { Request, Response,NextFunction } from "express";
-import { httpException } from "@/exceptions/httpException";
+import { httpException } from "../exceptions/httpException";
 
 export const ValidationMiddleware = (req:Request, res:Response, next:NextFunction):any =>{
     const errors = validationResult(req)
